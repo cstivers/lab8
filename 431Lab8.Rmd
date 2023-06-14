@@ -1,0 +1,54 @@
+---
+title: "Lab 8 Art"
+author: "Cameron Stivers"
+date: "2023-06-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(jasmines)
+library(dplyr)
+library(ggplot2)
+```
+## Distorted Window Panels
+
+```{r}
+gen_art <- use_seed(123) %>%
+  scene_grid(
+    entity = "circle",
+    grain = 75,
+    size = 2
+    ) %>%
+  unfold_warp(
+    iterations = 5,
+    scale = 0.25
+  ) %>%
+  style_pop(
+    palette = "batlow",
+    colour = "berlin",
+    alpha = 0.5,
+    background = "tokyo",
+    panels = 2
+  )
+gen_art
+```
+
+Here, we have two of the same generated pattern, which looks like a beautifully scratched window pane with a curved corner, each placed on a different background. The scratch marks on these panels each have a gradient color scheme, which makes them appear differently on each background panel. Using the generative art package "jasmine", the color scheme of the panels is set in style_pop(), where we used the theme "tokyo" for the background, and "batlow" and "berlin" for the palette and colors, respectively, which give the lines that rainbow gradient. Scene_grid() is used to create the overall structure of the markings. Here, circles were used as the main entity, which can be seen as a subtle pattern in the lighter grid, with grain set to 75. Increasing grain would add more lines to the piece, making these circles more evident, and decreasing would take some away. The size is what determines the size of these individual circles. In unfold_warp(), a series of warp operations is done which give the lines some curvature per iteration. If iterations is set to 1, then the lines are shorter and more straight, yet produce the same general shape. By increasing this to 5, we get the lines displayed here that give the piece additional noise. Scale determines how large the warp steps are. Increasing this introduces a lot of overlapping of the lines, making some parts of the piece bold, and decreasing it gives a lot of spacing between the lines, making the piece less together.
+
+## Veins of Vehicles
+
+```{r}
+mtcars %>%
+  ggplot(aes(x = hp, y = wt, xend = qsec, yend = drat, color = mpg, linewidth = disp)) +
+  geom_segment(show.legend = FALSE) +
+  theme_void() +
+  scale_color_gradient(low = "darkorchid", high = "darkred") + 
+  coord_cartesian() 
+```
+
+This piece of art is made with data from dplyr's mtcars. This piece is much simpler than the previous one in how it is put together. It is constructed using a segment plot, which connects two ordered pairs with a line. The varying line sizes and directions give this art piece a veiny, chaotic look, but the color gradient, made with scale_color_gradient, add a satisfying element to it. By setting the colors of the gradient, which are determined by the mpg variable, to dark orchid and dark red, we get a gradient with a range of similar colors. Getting rid of grid lines with theme_void() and the legend with show.legend = FALSE in geom_segment allows the lines to be placed on a blank canvas.
+
